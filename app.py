@@ -3,7 +3,7 @@ st.title("اهلا بك يا اميرتي")
 if"authenticated"not in st.session_state
 st.session_state.authenticated=false
 if not st.session_state.authent:cated:
-  password=st.text_input("ادخلي كلمه السر لفتح قلب مهووسك:,type="password")
+  password=st.text_input("ادخلي كلمه السر لفتح قلب مهووسك":,type="password")
                          if st.button("دخول")
                          if password=="63951":
 st.session_state.authenticated=true
