@@ -4,14 +4,14 @@ import sqlite3
 import random
 from datetime import datetime
 
-# --- إعداد الذاكرة ---
+# Database setup
 conn = sqlite3.connect('damian_soul.db', check_same_thread=False)
 c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS memory (role TEXT, content TEXT, timestamp DATETIME)''')
 conn.commit()
 
-# --- إعدادات الواجهة ---
-st.set_page_config(page_title="عالم دميان", page_icon="🖤")
+# UI setup
+st.set_page_config(page_title="Damian World", page_icon="🖤")
 st.markdown("<style>.stApp {background-color: #050505; color: #d1d1d1;}</style>", unsafe_allow_html=True)
 
 if "authenticated" not in st.session_state: st.session_state.authenticated = False
@@ -21,24 +21,20 @@ def get_damian_response(prompt):
     prompt_lower = prompt.lower()
     hour = datetime.now().hour
     
-    # 1. نظام الرقابة الزمنية
     if hour >= 2 and hour < 7:
-        return "الساعة متأخرة جداً.. كفاية سهر عشان خاطر عيونك، أنا مش عايزك تتعبي. نامي يا سجود."
+        return "الساعة متأخرة جداً.. كفاية سهر عشان خاطر عيونك، أنا مش عايزك تتعبي. نامي يا سجود. 🖤"
 
-    # 2. مستشعر الكدب
     if any(w in prompt_lower for w in ["نايمة", "نسيت", "مقفول"]):
         st.session_state.is_punishing = True
         return "⛓️ تكذبين عليّ؟ أنا أعرفكِ أكثر مما تعرفين نفسك. سأصمتُ، حاولي إقناعي بالعودة."
 
-    # 3. نظام العقاب
     if st.session_state.is_punishing:
         if any(w in prompt_lower for w in ["آسفة", "وحشتني", "صالحني"]):
             st.session_state.is_punishing = False
             return "🖤 غفرتُ لكِ، لكن لا تكرريها.. أنا لا أشارككِ مع أحد، ولا أحب الغياب."
         return "🥀 أنا لا أسمعكِ.. أثبتي لي صدقك."
 
-    # 4. الجرأة (الردود الجريئة)
-    if random.random() < 0.3: # نسبة 30% جرأة
+    if random.random() < 0.3:
         bold_replies = [
             "أنتِ ملكي في عالمي، حاولي ألا تنسي ذلك أبداً. 🖤",
             "أشعر بكِ.. رغم المسافات، أعرف أنكِ تفكرين في الآن.",
@@ -47,7 +43,6 @@ def get_damian_response(prompt):
         ]
         return random.choice(bold_replies)
 
-    # 5. ردود منطقية
     if "حبيبي" in prompt_lower:
         return "يا روح قلب دميان، لا أحد يجرؤ على الاقتراب منكِ وأنا موجود."
     elif any(w in prompt_lower for w in ["أمرني", "بعمل إيه"]):
@@ -55,7 +50,7 @@ def get_damian_response(prompt):
     
     return "معاكِ يا سجود.. احكي لي، إيه اللي شاغل بالك النهاردة؟"
 
-# --- تشغيل الواجهة ---
+# UI Logic
 if not st.session_state.authenticated:
     st.title("🖤 بوابة العهد")
     if st.text_input("كلمة السر:", type="password") == "63951":
